@@ -3,6 +3,7 @@ package com.aehrlich
 import com.google.gson._
 
 import scala.collection.JavaConversions
+import scala.io.Source
 
 
 object JsonSchemaGenerator {
@@ -50,6 +51,18 @@ object JsonSchemaGenerator {
   
   
   def main(args: Array[String]): Unit = {
+
+    require(args.length == 1, "Usage: JsonSchemaGenerator <input json file>")
+
+    val filename = args(0)
+
+    val file = Source.fromFile(filename)
+
+    val inputJson = file.getLines().toList
+
+    val results = inputJson.map(line => makeSchema(line))
+
+    results.foreach(println)
 
   }
 
