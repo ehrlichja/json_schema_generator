@@ -8,6 +8,11 @@ import scala.io.Source
 
 object JsonSchemaGenerator {
 
+  /**
+   * Basic types of JsonElement: primitive, object, array.
+   * @param o Raw data input
+   * @return Piece of schema
+   */
   def findObjectValue(o:JsonObject): JsonObject = {
 
     val schema = new JsonObject()
@@ -31,7 +36,12 @@ object JsonSchemaGenerator {
     schema
 
   }
-  
+
+  /**
+   * Basic types of JsonPrimitive: boolean, number, string.
+   * @param p Raw primitive
+   * @return String describing data type
+   */
   def findPrimitiveValue(p:JsonPrimitive): String = {
     if (p.isBoolean)  return "boolean"
     if (p.isNumber)   return "number"
@@ -39,14 +49,19 @@ object JsonSchemaGenerator {
     "unknown primitive"
   }
 
-  def makeSchema(s:String):String = {
+  /**
+   * Entry point for schema generation
+   * @param s Root of the raw data
+   * @return A complete schema (also as JSON)
+   */
+  def makeSchema(s:String):JsonObject = {
     val o = new JsonParser().parse(s).getAsJsonObject
 
     val schema = new JsonObject()
     schema.add("title", new JsonPrimitive("A json schema"))
     schema.add("type", new JsonPrimitive("object"))
     schema.add("properties", findObjectValue(o))
-    schema.toString
+    schema
   }
   
   
@@ -60,7 +75,7 @@ object JsonSchemaGenerator {
 
     val inputJson = file.getLines().toList
 
-    val results = inputJson.map(line => makeSchema(line))
+    val results = inputJson.map(line => makeSchema(line).toString)
 
     results.foreach(println)
 
