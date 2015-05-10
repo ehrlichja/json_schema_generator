@@ -44,7 +44,7 @@ object JsonSchemaGenerator {
    */
   def findPrimitiveValue(p:JsonPrimitive): String = {
     if (p.isBoolean)  return "boolean"
-    if (p.isNumber)   return "number"
+    if (p.isNumber)   if (p.getAsString.contains(".")) return "decimal" else return "integer"
     if (p.isString)   return "string"
     "unknown primitive"
   }
