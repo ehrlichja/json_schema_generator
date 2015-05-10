@@ -65,7 +65,7 @@ Output:
 
 ```
 {
-  Re"title": "A json schema",
+  "title": "A json schema",
   "type": "object",
   "properties": {
     "id": "number",
