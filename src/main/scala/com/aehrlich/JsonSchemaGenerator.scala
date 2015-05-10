@@ -9,7 +9,7 @@ object JsonSchemaGenerator {
 
   def findObjectValue(o:JsonObject): JsonObject = {
 
-    val s = new JsonObject()
+    val schema = new JsonObject()
 
     val rootSet = JavaConversions.asScalaSet(o.entrySet())
 
@@ -24,10 +24,10 @@ object JsonSchemaGenerator {
         case _                => new JsonPrimitive("unknown element")
       }
 
-      s.add(key, value)
+      schema.add(key, value)
     })
 
-    s
+    schema
 
   }
   
@@ -40,7 +40,12 @@ object JsonSchemaGenerator {
 
   def makeSchema(s:String):String = {
     val o = new JsonParser().parse(s).getAsJsonObject
-    findObjectValue(o).toString
+
+    val schema = new JsonObject()
+    schema.add("title", new JsonPrimitive("A json schema"))
+    schema.add("type", new JsonPrimitive("object"))
+    schema.add("properties", findObjectValue(o))
+    schema.toString
   }
   
   
